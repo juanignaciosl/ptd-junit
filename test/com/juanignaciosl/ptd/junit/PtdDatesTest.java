@@ -1,8 +1,14 @@
 package com.juanignaciosl.ptd.junit;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.matchers.JUnitMatchers.hasItem;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,18 +31,19 @@ public class PtdDatesTest {
 
 	@Test
 	public void theDayAfterJanuary1IsJanuary2() throws ParseException {
-		assertEquals(january2, january1.nextDay());
+		assertThat(january1.nextDay(), equalTo(january2));
+		assertThat(january1.nextDay(), is(equalTo(january2)));
 	}
 
 	@Test
 	public void theDayBeforeJanuary2IsJanuary1() throws ParseException {
-		assertEquals(january1, january2.previousDay());
+		assertThat(january2.previousDay(), equalTo(january1));
 	}
 
 	@Test
 	public void theDayBeforeTheDayAfterJanuary1IsJanuary1()
 			throws ParseException {
-		assertEquals(january1, january1.nextDay().previousDay());
+		assertThat(january1.nextDay().previousDay(), equalTo(january1));
 	}
 
 	@Test
@@ -47,12 +54,18 @@ public class PtdDatesTest {
 	@Test
 	public void twoEqualDatesAreNotTheSameObject() throws ParseException {
 		final PtdDate otherJanuary1 = new PtdDate(SDF.parse("01/01/2013"));
-		assertEquals(january1, otherJanuary1);
+		assertThat(otherJanuary1, not(sameInstance(january1)));
 	}
 
 	@Test
 	public void canRetrieveJanuary1Epoch() throws ParseException {
-		assertNotNull(january1.getEpoch());
+		assertThat(january1.getEpoch(), notNullValue());
+		assertThat(january1.getEpoch(), not(nullValue()));
+	}
+
+	@Test
+	public void january1MonthContainsJanuary1() {
+		assertThat(january1.month(), hasItem(january1));
 	}
 
 }

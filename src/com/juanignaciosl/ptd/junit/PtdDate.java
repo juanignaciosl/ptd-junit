@@ -1,6 +1,9 @@
 package com.juanignaciosl.ptd.junit;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 
 public class PtdDate {
@@ -25,7 +28,7 @@ public class PtdDate {
 	}
 	
 	private Calendar sumDays(int increment) {
-		Calendar nextDay = Calendar.getInstance();
+		final Calendar nextDay = Calendar.getInstance();
 		nextDay.setTime(date.getTime());
 		nextDay.add(Calendar.DAY_OF_MONTH, increment);
 		return nextDay;
@@ -64,5 +67,25 @@ public class PtdDate {
 	public Date getEpoch() {
 		return date.getTime();
 	}
+
+	public Collection<PtdDate> month() {
+		final Collection<PtdDate> month = new ArrayList<PtdDate>();
+		final Calendar day = (Calendar) date.clone();
+		for(int i = 1; i <= day.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
+			day.set(Calendar.DAY_OF_MONTH, i);
+			month.add(new PtdDate(day.getTime()));
+		}
+		return month;
+	}
+	
+	private static final SimpleDateFormat SDF = new SimpleDateFormat(
+			"dd/MM/yyyy");
+
+	@Override
+	public String toString() {
+		return SDF.format(date.getTime());
+	}
+	
+	
 
 }
